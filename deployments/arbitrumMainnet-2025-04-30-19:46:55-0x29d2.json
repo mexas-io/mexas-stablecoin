@@ -1,0 +1,29 @@
+{
+  "network": "arbitrumMainnet",
+  "proxy": "0xc4c2EdE4F6fD623ACc86C492BDF099b3bA2B8303",
+  "implementation": "0xb2F19fCb213a9afEae5d706b7DD86C97dA3Ea165",
+  "owner": "0x7851bB23D54Bc032A3eb82F4cCCCAD4287Ab62a4",
+  "deployer": "0x8e0684468A6c5F12A38fb15782486a874F80BcD5",
+  "initialSupply": 0,
+  "version": "1.0.0",
+  "transactionHash": "0x29d2871ebd1ce592de01e0419460c34846a8dbe85075fb68a2bc5adb2505de7b",
+  "tokenMetadata": {
+    "name": "MEXAS Stablecoin",
+    "symbol": "MEX",
+    "decimals": 6
+  },
+  "deploymentDate": "2025-04-30 19:46:55",
+  "compiler": {
+    "solcVersion": "0.8.28",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "metadataHash": "unknown"
+  },
+  "bytecode": {
+    "proxyHash": "0xbc8149bb999ad7ffbf655e31d2092155e6988badf04cdd5121c4b4f6e5299c2c",
+    "implementationHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+  }
+}

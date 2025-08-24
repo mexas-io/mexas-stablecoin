@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compile
+        run: npm run compile
+
+      - name: Storage layout (text)
+        run: npm run storage:layout > storage-layout.txt
+
+      - name: Storage layout (json)
+        run: npm run storage:layout:json > storage-layout.json
+
+      - name: Extract MEXAS ABI and artifact
+        run: |
+          test -f artifacts/contracts/MEXAS.sol/MEXAS.json || { echo "MEXAS artifact not found" >&2; exit 1; }
+          cp artifacts/contracts/MEXAS.sol/MEXAS.json MEXAS.artifact.json
+          node -e "const fs=require('fs');const p='artifacts/contracts/MEXAS.sol/MEXAS.json';const o=JSON.parse(fs.readFileSync(p,'utf8'));fs.writeFileSync('MEXAS.abi.json', JSON.stringify(o.abi, null, 2));"
+
+      - name: Package build artifacts
+        run: zip -r build-artifacts.zip storage-layout.txt storage-layout.json MEXAS.artifact.json MEXAS.abi.json artifacts cache || true
+
+      - name: Create or update release asset
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -e
+          gh release create "$TAG" --title "$TAG" --notes "Automated release" || true
+          gh release upload "$TAG" build-artifacts.zip --clobber
+          gh release upload "$TAG" MEXAS.artifact.json --clobber || true
+          gh release upload "$TAG" MEXAS.abi.json --clobber || true

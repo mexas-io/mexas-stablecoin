@@ -1,0 +1,29 @@
+{
+  "network": "ethereumMainnet",
+  "proxy": "0x6E8B146AF16429b037ecE5943F3c0E5f412ddFA7",
+  "implementation": "0xc4c2EdE4F6fD623ACc86C492BDF099b3bA2B8303",
+  "owner": "0x82c40c2921DC724c36FA89d0D6014C6D3DFb7c08",
+  "deployer": "0x8e0684468A6c5F12A38fb15782486a874F80BcD5",
+  "initialSupply": 0,
+  "version": "1.0.0",
+  "transactionHash": "0x12800fe905b49aca55d6ba5284f78ea57b18dc886899490c519943ba3e9efde6",
+  "tokenMetadata": {
+    "name": "MEXAS Stablecoin",
+    "symbol": "MEX",
+    "decimals": 6
+  },
+  "deploymentDate": "2025-03-28 05:59:01",
+  "compiler": {
+    "solcVersion": "0.8.28",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "metadataHash": "unknown"
+  },
+  "bytecode": {
+    "proxyHash": "0xee8a105971995661291a9f284262a87abf2381b3cdc93b2c8fbeffe4cd636dd9",
+    "implementationHash": "0xbc8149bb999ad7ffbf655e31d2092155e6988badf04cdd5121c4b4f6e5299c2c"
+  }
+}

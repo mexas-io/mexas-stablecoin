@@ -1,0 +1,64 @@
+{
+  "name": "mexas-stablecoin",
+  "homepage": "https://mexas.io",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "test": "npx hardhat test --show-stack-traces",
+    "coverage": "npx hardhat coverage",
+    "compile": "npx hardhat compile --show-stack-traces",
+    "typechain": "npx hardhat typechain --show-stack-traces",
+    "lint:sol": "npx solhint 'contracts/**/*.sol'",
+    "lint:ts": "tsc -p tsconfig.json --noEmit",
+    "coverage:check": "npx ts-node scripts/ci/check-coverage-threshold.ts 90",
+    "storage:layout": "npx ts-node scripts/ci/print-storage-layout.ts",
+    "storage:layout:json": "npx ts-node scripts/ci/print-storage-layout-json.ts",
+    "storage:snapshot": "npm run storage:layout:json > docs/storage/MEXAS.latest.layout.json",
+    "deploy": "npx hardhat mexas:deploy",
+    "mint": "npx hardhat mexas:prepare-mint",
+    "burn": "npx hardhat mexas:prepare-burn",
+    "send": "npx hardhat mexas:prepare-send",
+    "verify": "npx hardhat mexas:verify-contract",
+    "submit": "npx hardhat mexas:submit-tx"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "2.1.0",
+    "@nomicfoundation/hardhat-ethers": "3.1.0",
+    "@nomicfoundation/hardhat-network-helpers": "1.1.0",
+    "@nomicfoundation/hardhat-toolbox": "6.1.0",
+    "@openzeppelin/contracts": "5.4.0",
+    "@openzeppelin/contracts-upgradeable": "5.4.0",
+    "@openzeppelin/hardhat-upgrades": "3.9.1",
+    "@typechain/ethers-v6": "0.5.1",
+    "@typechain/hardhat": "9.1.0",
+    "@types/chai": "4.3.20",
+    "@types/mocha": "10.0.10",
+    "@types/node": "22.10.10",
+    "chai": "4.5.0",
+    "chai-as-promised": "8.0.2",
+    "hardhat": "2.26.3",
+    "ts-node": "10.9.2",
+    "typechain": "8.3.2",
+    "typescript": "5.7.3"
+  },
+  "dependencies": {
+    "dotenv": "16.4.7",
+    "ethers": "6.14.0",
+    "glob": "11.0.1",
+    "solidity-coverage": "0.8.16",
+    "solhint": "6.0.1",
+    "solhint-plugin-prettier": "0.1.0",
+    "ws": "8.18.0"
+  },
+  "overrides": {
+    "@ethersproject/providers": {
+      "ws": "8.18.0"
+    },
+    "glob": "11.0.1",
+    "@metamask/eth-sig-util": "8.1.2",
+    "hardhat": {
+      "ethereumjs-abi": "@ethersproject/abi@5.7.0"
+    }
+  }
+}

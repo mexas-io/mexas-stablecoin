@@ -1,0 +1,135 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Build, Lint, Test, Coverage, Storage Layout
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (Solidity)
+        run: npm run lint:sol
+
+      - name: Compile (deterministic)
+        run: npm run compile | tee compile.log
+
+      - name: Fail on compiler warnings
+        run: |
+          if grep -E "warning:|Warning:" compile.log; then
+            echo "Compiler warnings detected" >&2
+            exit 1
+          fi
+
+      - name: Lint (TypeScript)
+        run: npm run lint:ts
+
+      - name: Test
+        run: npm test
+
+      - name: Coverage
+        run: npm run coverage
+
+      - name: Enforce coverage threshold
+        run: npm run coverage:check
+
+      - name: Storage layout report
+        run: npm run storage:layout > storage-layout.txt
+
+      - name: Storage layout JSON
+        run: npm run storage:layout:json > storage-layout.json
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage/
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            artifacts
+            cache
+            coverage
+            storage-layout.txt
+            storage-layout.json
+
+      - name: Diff storage layout against latest release or repo snapshot
+        if: github.event_name == 'pull_request' || github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          echo "Fetching latest release build-artifacts.zip..."
+          ASSET_URL=$(gh api repos/${{ github.repository }}/releases/latest \
+            --jq '.assets[] | select(.name=="build-artifacts.zip") | .browser_download_url' || true)
+          if [ -z "$ASSET_URL" ]; then
+            echo "No previous release artifact found; will try repo snapshot fallback"
+          else
+            mkdir -p prev
+            curl -L "$ASSET_URL" -o prev/build-artifacts.zip || true
+            if [ -f prev/build-artifacts.zip ]; then
+              unzip -oq prev/build-artifacts.zip -d prev || true
+            fi
+          fi
+          # Prefer JSON layout diff; fallback to repo snapshot in docs/storage
+          BASE_JSON=""
+          if [ -f prev/storage-layout.json ]; then
+            BASE_JSON=prev/storage-layout.json
+          elif [ -f docs/storage/MEXAS.latest.layout.json ]; then
+            BASE_JSON=docs/storage/MEXAS.latest.layout.json
+          fi
+          if [ -n "$BASE_JSON" ]; then
+            echo "--- Storage Layout JSON Diff (previous vs current) ---"
+            diff -u "$BASE_JSON" storage-layout.json || true
+          elif [ -f prev/storage-layout.txt ]; then
+            echo "--- Storage Layout TXT Diff (previous vs current) ---"
+            diff -u prev/storage-layout.txt storage-layout.txt || true
+          else
+            echo "No previous layout found; skipping diff"
+          fi
+
+      - name: npm audit (prod only)
+        run: npm audit --omit=dev || true
+
+  slither:
+    name: Slither static analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci --silent
+
+      - name: Slither Analysis
+        run: |
+          docker run --rm \
+            -v $PWD:/share \
+            trailofbits/eth-security-toolbox \
+            bash -c "cd /share && slither . --filter-paths 'node_modules|artifacts|cache|coverage|test|contracts/mock' --config=.slither.json"

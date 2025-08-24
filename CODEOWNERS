@@ -1,0 +1,35 @@
+# CODEOWNERS
+# Global ownership for MEXAS stablecoin repository
+# Organization: https://github.com/mexas-io
+# Primary maintainer: david@mexas.io
+
+# Global fallback - all files require review
+* @dcortes-dev
+
+# Smart contract core (requires security review)
+/contracts/ @dcortes-dev
+/scripts/deploy-mexas.ts @dcortes-dev
+/scripts/verify.ts @dcortes-dev
+
+# Testing and quality assurance
+/test/ @dcortes-dev
+/.solcover.js @dcortes-dev
+
+# DevOps and CI/CD
+/.github/ @dcortes-dev
+/hardhat.config.ts @dcortes-dev
+/package.json @dcortes-dev
+/package-lock.json @dcortes-dev
+
+# Transaction preparation scripts (operational)
+/scripts/prepare-*.ts @dcortes-dev
+/scripts/sign-and-submit.ts @dcortes-dev
+
+# Documentation and governance
+/README.md @dcortes-dev
+/SECURITY.md @dcortes-dev
+/AUDIT_SCOPE.md @dcortes-dev
+/UPGRADE_POLICY.md @dcortes-dev
+/STORAGE_LAYOUT.md @dcortes-dev
+/OPERATIONS.md @dcortes-dev
+/RELEASE.md @dcortes-dev

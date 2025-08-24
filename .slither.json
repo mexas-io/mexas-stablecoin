@@ -1,0 +1,10 @@
+{
+  "filter_paths": "contracts/mock|node_modules|artifacts|cache|coverage|test",
+  "detectors_to_exclude": [
+    "naming-convention"
+  ],
+  "exclude_dependencies": true,
+  "solc_remaps": [
+    "@openzeppelin=node_modules/@openzeppelin"
+  ]
+}
