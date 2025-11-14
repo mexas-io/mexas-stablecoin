@@ -56,6 +56,9 @@ export async function verifyMexas(address: string, networkName: Network) {
       case "ethereumMainnet":
         console.log("\nℹ️ Note: Ethereum verification may take up to 15 minutes to appear on the explorer");
         break;
+      case "bscMainnet":
+        console.log("\nℹ️ Note: BSC verification may take up to 5 minutes to appear on the explorer");
+        break;
     }
   }
 }

@@ -144,6 +144,7 @@ npm run coverage
 - Avalanche Mainnet
 - Base Mainnet
 - Polygon Mainnet
+- Binance Smart Chain (BSC) Mainnet
 - Arbitrum Sepolia (Testnet)
 
 ### Quick Deploy (CLI example)
@@ -160,6 +161,8 @@ npm run verify --network <network-name> -- \
 ```
 See **[Operations Guide](docs/OPERATIONS.md)** for full deployment/verification tasks and environment configuration.
 
+> Tip: run `npm run deploy:dry-run -- --network <network-name> --initial-supply <amount>` first to confirm RPC connectivity, signer balance, and configuration without making the deployment.
+
 ### Operations & Tasks
 
 All commands are available via `npx hardhat <task>` and mapped to npm scripts for convenience.
@@ -167,6 +170,7 @@ All commands are available via `npx hardhat <task>` and mapped to npm scripts fo
 | Task | npm Script | Purpose |
 |------|------------|---------|
 | `mexas:deploy` | `npm run deploy` | Deploy MEXAS token contract |
+| `mexas:deploy-dry-run` | `npm run deploy:dry-run` | Simulate deployment to validate env, RPC, signer, and gas before broadcasting |
 | `mexas:verify-contract` | `npm run verify` | Verify contract on block explorer |
 | `mexas:prepare-mint` | `npm run mint` | Prepare mint tx (to treasury) |
 | `mexas:prepare-burn` | `npm run burn` | Prepare burn/redeem tx |
@@ -241,6 +245,7 @@ The test suite covers:
 - Avalanche Mainnet
 - Base Mainnet
 - Polygon Mainnet
+- Binance Smart Chain (BSC) Mainnet
 
 ### Testnet Networks
 - Arbitrum Sepolia
