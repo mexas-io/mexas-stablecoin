@@ -48,3 +48,8 @@ task("mexas:submit-tx", "Sign and submit prepared transaction (dev only, does no
     const { submitTx } = await import("../scripts/sign-and-submit");
     await submitTx(taskArgs.file);
   });
+
+task("mexas:deployment-info", "Audit on-chain deployment: proxy, implementation, owner, and Safe details")
+  .setAction(async (_taskArgs, hre: HardhatRuntimeEnvironment) => {
+    await hre.run("run", { script: "scripts/deployment-info.ts" });
+  });
