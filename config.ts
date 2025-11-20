@@ -9,6 +9,7 @@ export type Network =
   | "polygonMainnet"
   | "avalancheMainnet"
   | "baseMainnet"
+  | "bscMainnet"
   | "hardhat";
 
 interface ScannerConfig {
@@ -89,6 +90,15 @@ export function getNetworkConfig(network: Network): NetworkConfig {
         proxyAddress: getEnv("BASE_MAINNET_PROXY_ADDRESS"),
         treasuryAddress: getEnv("BASE_MAINNET_TREASURY_ADDRESS"),
         scanner: { url: getEnv("BASESCAN_URL") },
+      };
+    case "bscMainnet":
+      return {
+        ownerAddress: getEnv("BSC_MAINNET_OWNER_ADDRESS"),
+        deployerAddress: getEnv("BSC_MAINNET_DEPLOYER_ADDRESS"),
+        deployPrivateKey: getEnv("BSC_MAINNET_DEPLOY_PRIVATE_KEY"),
+        proxyAddress: getEnv("BSC_MAINNET_PROXY_ADDRESS"),
+        treasuryAddress: getEnv("BSC_MAINNET_TREASURY_ADDRESS"),
+        scanner: { url: getEnv("BSCSCAN_URL", "https://bscscan.com") },
       };
     case "hardhat":
     default:

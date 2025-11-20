@@ -12,7 +12,7 @@ function getConfig() {
   // Validate network is supported
   const supportedNetworks: Network[] = [
     "ethereumMainnet", "arbitrumMainnet", "polygonMainnet",
-    "avalancheMainnet", "baseMainnet", "arbitrumSepolia", "hardhat"
+    "avalancheMainnet", "baseMainnet", "bscMainnet", "arbitrumSepolia", "hardhat"
   ];
 
   if (!supportedNetworks.includes(networkName)) {

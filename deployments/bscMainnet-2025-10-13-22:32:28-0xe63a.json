@@ -1,0 +1,29 @@
+{
+  "network": "bscMainnet",
+  "proxy": "0x405E5F9C7D6F6E9f03a5b64e275f374507734fD6",
+  "implementation": "0x6E8B146AF16429b037ecE5943F3c0E5f412ddFA7",
+  "owner": "0x42b8A305F548FA47Dd2309BC54198fcA0C9A15eA",
+  "deployer": "0x8e0684468A6c5F12A38fb15782486a874F80BcD5",
+  "initialSupply": "0",
+  "version": "1.0.0",
+  "transactionHash": "0xe63a3de6373767ea4dea5cdc1f0237b75c9ad8f2d5665d2c0c9bb7d399e75af4",
+  "compiler": {
+    "solcVersion": "0.8.28",
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "metadataHash": "ipfs"
+  },
+  "bytecode": {
+    "proxyHash": "0x864cc9ad53b338b82da1f7cab85ab0b3d5c8861acb422b6fec63cf36234f36a6",
+    "implementationHash": "0x48d08d48791cdc181307d1d11e9c6b5a6ecb34c88e489078c70c5c54fbfb203c"
+  },
+  "tokenMetadata": {
+    "name": "MEXAS Stablecoin",
+    "symbol": "MEX",
+    "decimals": 6
+  },
+  "deploymentDate": "2025-10-13 22:32:28"
+}

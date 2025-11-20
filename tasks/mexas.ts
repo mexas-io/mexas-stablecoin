@@ -49,6 +49,16 @@ task("mexas:submit-tx", "Sign and submit prepared transaction (dev only, does no
     await submitTx(taskArgs.file);
   });
 
+task("mexas:deploy-dry-run", "Dry run deployment to test configuration without actually deploying")
+  .addParam("initialSupply", "Initial token supply", undefined, types.string)
+  .addOptionalParam("owner", "Owner address (defaults to network config owner)", undefined, types.string)
+  .addOptionalParam("name", "Token name (defaults to config/token env)", undefined, types.string)
+  .addOptionalParam("symbol", "Token symbol (defaults to config/token env)", undefined, types.string)
+  .setAction(async (taskArgs, hre: HardhatRuntimeEnvironment) => {
+    const { deployMexasDryRun } = await import("../scripts/deploy-mexas-dry-run");
+    await deployMexasDryRun(taskArgs.initialSupply, taskArgs.owner, taskArgs.name, taskArgs.symbol);
+  });
+
 task("mexas:deployment-info", "Audit on-chain deployment: proxy, implementation, owner, and Safe details")
   .setAction(async (_taskArgs, hre: HardhatRuntimeEnvironment) => {
     await hre.run("run", { script: "scripts/deployment-info.ts" });

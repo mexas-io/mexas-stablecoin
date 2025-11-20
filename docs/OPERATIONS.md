@@ -81,6 +81,7 @@ All operational commands are available via Hardhat tasks and mapped to npm scrip
 | `mexas:prepare-burn` | `npm run burn` | `npx hardhat mexas:prepare-burn` | Prepare burn/redeem tx |
 | `mexas:prepare-send` | `npm run send` | `npx hardhat mexas:prepare-send` | Prepare send tx |
 | `mexas:submit-tx` | `npm run submit` | `npx hardhat mexas:submit-tx` | Submit prepared tx (dev only) |
+| `mexas:deploy-dry-run` | `npm run deploy:dry-run` | `npx hardhat mexas:deploy-dry-run` | Full deployment simulation (no broadcast) |
 | `mexas:deployment-info` | `npm run deployment-info` | `npx hardhat mexas:deployment-info` | Audit proxy, implementation, owner, Safe owners/threshold |
 
 ### Deployment Examples
@@ -98,7 +99,6 @@ npm run deploy -- --network arbitrumSepolia \
 
 # Deploy to mainnet (ensure .env is configured)
 npm run deploy -- --network arbitrumMainnet --initial-supply 1000000
-
 ```
 
 **Method 2: Direct Hardhat tasks**
@@ -111,6 +111,22 @@ npx hardhat mexas:deploy --network arbitrumSepolia \
 
 # Verify deployed contract
 npx hardhat mexas:verify-contract --network arbitrumSepolia --address 0x...
+```
+
+### Dry-Run Deployment (Pre-flight)
+
+Use the dry-run task before touching mainnet to validate environment variables, RPC connectivity, signer balances, and gas assumptions without creating transactions.
+
+```bash
+# Run a pre-flight check (no on-chain effects)
+npm run deploy:dry-run -- --network bscMainnet --initial-supply 1000000
+
+# Override owner/name/symbol if needed
+npx hardhat mexas:deploy-dry-run --network bscMainnet \
+  --initial-supply 500000 \
+  --owner 0xYourOwnerSafe \
+  --name "MEXAS Stablecoin" \
+  --symbol "MEX"
 ```
 
 ### Operational Examples
@@ -154,6 +170,18 @@ npm run verify -- --network arbitrumMainnet --address <deployed-proxy-address>
 
 # Alternative: Direct Hardhat task
 npx hardhat mexas:verify-contract --network arbitrumMainnet --address <address>
+
+# BSC verification example
+npx hardhat mexas:verify-contract --network bscMainnet --address 0x405E5F9C7D6F6E9f03a5b64e275f374507734fD6
+```
+
+### Deployment Info (On-chain)
+```bash
+# Retrieve on-chain deployment info (proxy, impl, owner, Safe owners/threshold)
+npm run deployment-info -- --network bscMainnet
+
+# Or via Hardhat directly
+npx hardhat mexas:deployment-info --network ethereumMainnet
 ```
 
 ### Deployment Info (On-chain)
