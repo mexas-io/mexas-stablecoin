@@ -16,6 +16,7 @@ For more information, visit [mexas.io](https://mexas.io).
 - [Development](#development)
 - [Deployment](#deployment)
 - [Operations & Tasks](#operations--tasks)
+- [Governance](#governance)
 - [Security](#security)
 - [Testing](#testing)
 - [Network Support](#network-support)
@@ -171,8 +172,16 @@ All commands are available via `npx hardhat <task>` and mapped to npm scripts fo
 | `mexas:prepare-burn` | `npm run burn` | Prepare burn/redeem tx |
 | `mexas:prepare-send` | `npm run send` | Prepare send tx |
 | `mexas:submit-tx` | `npm run submit` | Submit prepared tx (dev only) |
+| `mexas:deployment-info` | `npm run deployment-info` | Retrieve on-chain deployment info (proxy, implementation, owner, Safe owners/threshold) |
 
 For parameters, examples, environment setup, and the complete operational CLI (mint, burn/redeem, send, submit via Gnosis Safe) with transaction submission details, see **[docs/OPERATIONS.md](docs/OPERATIONS.md)**.
+
+## Governance
+
+- Full governance, signer sets, and Safe thresholds are documented in **[docs/GOVERNANCE.md](docs/GOVERNANCE.md)**. That document explains who can upgrade, pause, blacklist, mint, and burn, and how circulating supply is controlled operationally.
+- Issuer Safes (owning the proxy) are configured 3-of-5 across all mainnets. Treasury Safes are 2-of-5 so routine mint/burn/redemption flows never require touching the issuer Safe.
+- Treasury balances are treated as non-circulating supply. When tokens leave the treasury Safe they count as circulating; when returned (e.g. redemptions) they immediately become non-circulating again.
+- Re-validate on-chain data (proxy, implementation, owner, Safe owners/threshold) via `npx hardhat mexas:deployment-info --network <network>` or by cross-checking `deployments/*.json` with the Gnosis Safe UI and on-chain explorers.
 
 ## Security
 

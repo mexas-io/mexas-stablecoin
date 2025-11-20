@@ -81,22 +81,24 @@ All operational commands are available via Hardhat tasks and mapped to npm scrip
 | `mexas:prepare-burn` | `npm run burn` | `npx hardhat mexas:prepare-burn` | Prepare burn/redeem tx |
 | `mexas:prepare-send` | `npm run send` | `npx hardhat mexas:prepare-send` | Prepare send tx |
 | `mexas:submit-tx` | `npm run submit` | `npx hardhat mexas:submit-tx` | Submit prepared tx (dev only) |
+| `mexas:deployment-info` | `npm run deployment-info` | `npx hardhat mexas:deployment-info` | Audit proxy, implementation, owner, Safe owners/threshold |
 
 ### Deployment Examples
 
 **Method 1: npm scripts (Recommended)**
 ```bash
 # Deploy to Arbitrum Sepolia with minimal parameters
-npm run deploy --network arbitrumSepolia -- --initial-supply 1000000
+npm run deploy -- --network arbitrumSepolia --initial-supply 1000000
 
 # Deploy with custom token metadata
-npm run deploy --network arbitrumSepolia -- \
+npm run deploy -- --network arbitrumSepolia \
   --initial-supply 1000000 \
   --name "MEXAS Stablecoin" \
   --symbol "MEX"
 
 # Deploy to mainnet (ensure .env is configured)
-npm run deploy --network arbitrumMainnet -- --initial-supply 1000000
+npm run deploy -- --network arbitrumMainnet --initial-supply 1000000
+
 ```
 
 **Method 2: Direct Hardhat tasks**
@@ -113,10 +115,12 @@ npx hardhat mexas:verify-contract --network arbitrumSepolia --address 0x...
 
 ### Operational Examples
 
+> Minting, burning, and redemptions rely on the governance model summarized in [docs/GOVERNANCE.md](./GOVERNANCE.md). Issuer multisigs (3-of-5) retain upgrade/admin powers, while treasury multisigs (2-of-5) hold newly minted supply. Tokens stay non-circulating while in the treasury Safe; once transferred out they count toward circulating supply, and returning them to the treasury (redemptions) removes them from circulation without needing issuer approval.
+
 **Minting Tokens**
 ```bash
 # Prepare mint transaction (always mints to treasury address)
-npm run mint --network arbitrumMainnet -- --amount 50000
+npm run mint -- --network arbitrumMainnet --amount 50000
 
 # Alternative: Direct Hardhat task
 npx hardhat mexas:prepare-mint --network arbitrumMainnet --amount 50000
@@ -125,7 +129,7 @@ npx hardhat mexas:prepare-mint --network arbitrumMainnet --amount 50000
 **Burning/Redeeming Tokens**
 ```bash
 # Prepare burn transaction (burns from owner address)
-npm run burn --network arbitrumMainnet -- --amount 25000
+npm run burn -- --network arbitrumMainnet --amount 25000
 
 # Alternative: Direct Hardhat task
 npx hardhat mexas:prepare-burn --network arbitrumMainnet --amount 25000
@@ -134,7 +138,7 @@ npx hardhat mexas:prepare-burn --network arbitrumMainnet --amount 25000
 **Sending Tokens**
 ```bash
 # Prepare send transaction
-npm run send --network arbitrumMainnet -- \
+npm run send -- --network arbitrumMainnet \
   --to 0x1234567890123456789012345678901234567890 \
   --amount 1000
 
@@ -142,15 +146,23 @@ npm run send --network arbitrumMainnet -- \
 npx hardhat mexas:prepare-send --network arbitrumMainnet \
   --to 0x1234567890123456789012345678901234567890 \
   --amount 1000
-```
 
 **Contract Verification**
 ```bash
 # Verify contract on block explorer
-npm run verify --network arbitrumMainnet -- --address <deployed-proxy-address>
+npm run verify -- --network arbitrumMainnet --address <deployed-proxy-address>
 
 # Alternative: Direct Hardhat task
 npx hardhat mexas:verify-contract --network arbitrumMainnet --address <address>
+```
+
+### Deployment Info (On-chain)
+```bash
+# Retrieve on-chain deployment info (proxy, impl, owner, Safe owners/threshold)
+npm run deployment-info -- --network baseMainnet
+
+# Or via Hardhat directly
+npx hardhat mexas:deployment-info --network ethereumMainnet
 ```
 
 ### Complete Workflow Example
@@ -163,21 +175,21 @@ cp .env.example .env
 # Edit .env with your network credentials
 
 # 2. Deploy contract
-npm run deploy --network arbitrumSepolia -- \
+npm run deploy -- --network arbitrumSepolia -- \
   --initial-supply 1000000 \
   --name "MEXAS Stablecoin" \
   --symbol "MEX"
 
 # 3. Verify contract (use address from deployment output)
-npm run verify --network arbitrumSepolia -- --address <deployed-proxy-address>
+npm run verify -- --network arbitrumSepolia --address <deployed-proxy-address>
 
 # 4. Prepare mint transaction (to treasury)
-npm run mint --network arbitrumSepolia -- --amount 50000
+npm run mint -- --network arbitrumSepolia --amount 50000
 
 # 5. Execute via Gnosis Safe (production) or submit directly (development)
 # For Gnosis Safe: Import the generated JSON file from transactions/
 # For development: Submit directly
-npm run submit --network arbitrumSepolia -- --file transactions/<generated-file>.json
+npm run submit -- --network arbitrumSepolia --file transactions/<generated-file>.json
 ```
 
 ### Transaction Submission
@@ -190,7 +202,7 @@ npm run submit --network arbitrumSepolia -- --file transactions/<generated-file>
 **For Development/Testing (Single-sig)**
 ```bash
 # Submit a prepared transaction directly (bypasses multisig)
-npm run submit --network arbitrumSepolia -- --file transactions/<file>.json
+npm run submit -- --network arbitrumSepolia --file transactions/<file>.json
 ```
 
 ### CLI Parameters

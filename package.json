@@ -16,6 +16,8 @@
     "storage:layout:json": "npx ts-node scripts/ci/print-storage-layout-json.ts",
     "storage:snapshot": "npm run storage:layout:json > docs/storage/MEXAS.latest.layout.json",
     "deploy": "npx hardhat mexas:deploy",
+    "deploy:dry-run": "npx hardhat mexas:deploy-dry-run",
+    "deployment-info": "npx hardhat mexas:deployment-info",
     "mint": "npx hardhat mexas:prepare-mint",
     "burn": "npx hardhat mexas:prepare-burn",
     "send": "npx hardhat mexas:prepare-send",
